@@ -9,6 +9,7 @@ import { AddressModule } from 'src/addresses/addresses.module';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { CategoriesModule } from './categories/categories.module';
+import { ConfigModule as LocalConfigModule } from './config/config.module';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 
@@ -20,6 +21,7 @@ import { AuthMiddleware } from './auth/middlewares/auth.middleware';
     AuthModule,
     CartModule,
     CategoriesModule,
+    LocalConfigModule,
     ProductsModule,
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),

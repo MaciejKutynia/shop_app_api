@@ -4,7 +4,7 @@ import { AddressModel } from '../entities/address.entity';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { GraphQLContext } from '../../interfaces';
-import { CreateAddressInterface } from '../interfaces/address.interface';
+
 import {
   CreateAddressInput,
   UpdateAddressInput,
