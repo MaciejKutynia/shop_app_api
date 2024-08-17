@@ -1,5 +1,8 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
-import { FiltersInterface } from '../interfaces/products.interface';
+import {
+  FiltersInterface,
+  SortInterface,
+} from '../interfaces/products.interface';
 import { ProductsModel } from '../entities/products.entity';
 
 @InputType()
@@ -34,8 +37,8 @@ export class GetProductsInput {
   @Field()
   category_url_key: string;
 
-  @Field({ nullable: true })
-  sort: string;
+  @Field(() => SortInput, { nullable: true })
+  sort: SortInterface;
 
   @Field(() => String, { nullable: true })
   filters: FiltersInterface;
@@ -48,4 +51,22 @@ export class ProductsResponse {
 
   @Field(() => Int)
   count: number;
+}
+
+@ObjectType()
+export class SortInput {
+  @Field({ defaultValue: 'id', nullable: true })
+  orderBy: string;
+
+  @Field({ defaultValue: 'ASC', nullable: true })
+  direction: string;
+}
+
+@ObjectType()
+export class FilterInput {
+  @Field({ defaultValue: 'id', nullable: true })
+  orderBy: string;
+
+  @Field({ defaultValue: 'ASC', nullable: true })
+  direction: string;
 }
