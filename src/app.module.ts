@@ -9,21 +9,27 @@ import { AddressModule } from 'src/addresses/addresses.module';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { CategoriesModule } from './categories/categories.module';
-import { ConfigModule as LocalConfigModule } from './config/config.module';
+import { StoreConfigModule as LocalConfigModule } from './storeConfig/storeConfig.module';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 
 import { AuthMiddleware } from './auth/middlewares/auth.middleware';
+import { AppSchedulerModule } from './scheduler/scheduler.module';
+import { TokenBlackListModule } from './tokenBlackList/tokenBlackList.module';
 
 @Module({
   imports: [
+    //App modules
     AddressModule,
+    AppSchedulerModule,
     AuthModule,
     CartModule,
     CategoriesModule,
     LocalConfigModule,
     ProductsModule,
+    TokenBlackListModule,
     UsersModule,
+    //Tools modules
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

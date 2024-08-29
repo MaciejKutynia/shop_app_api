@@ -10,11 +10,7 @@ export class CategoriesService {
     private readonly categoriesRepo: Repository<CategoriesModel>,
   ) {}
 
-  async getAllCategories() {
-    return this.categoriesRepo.find();
-  }
-
-  async getCategoryByUrlKey(url_key: string) {
+  public async getCategoryByUrlKey(url_key: string) {
     return this.categoriesRepo.findOne({ where: { url_key } });
   }
 }

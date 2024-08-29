@@ -33,15 +33,21 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Post('logout')
   async logoutUser(@Req() req: Request, @Body() token: string) {
-    const { id } = req.user;
-    return 'logout';
+    return this.authService.logoutUser(token);
   }
 
+  @Post('verify-token')
+  async verifyToken(@Body() token: string) {
+    return this.authService.verifyToken(token);
+  }
+
+  // TODO: Add possibility of password recovery
   @Post('recover-password')
   async recoverPassword(@Body() email: string) {
     return 'recover-password';
   }
 
+  // TODO: Add possibility of changing recovery
   @UseGuards(AuthGuard)
   @Post('change-password')
   async changePassword(@Req() req: Request, @Body() newPassword: string) {
@@ -51,6 +57,6 @@ export class AuthController {
 
   @Post('activate-account')
   async activateAccount(@Body() access_token: string) {
-    return 'activate-account';
+    return this.authService.activateAccount(access_token);
   }
 }

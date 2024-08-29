@@ -3,14 +3,14 @@ import { NextFunction, Request, Response } from 'express';
 
 import { AuthMiddleware } from '../auth.middleware';
 import { UserService } from '../../../users/services/user.service';
-import { UserEntity } from '../../../users/entities/user.entity';
+import { UserModel } from '../../../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { TestingModule, Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('AuthMiddleware', () => {
   let authMiddleware: AuthMiddleware;
-  let userRepo: Repository<UserEntity>;
+  let userRepo: Repository<UserModel>;
   let jwtService: JwtService;
   let userService: UserService;
   let req: Partial<Request>;
@@ -22,15 +22,13 @@ describe('AuthMiddleware', () => {
       providers: [
         UserService,
         {
-          provide: getRepositoryToken(UserEntity),
+          provide: getRepositoryToken(UserModel),
           useClass: Repository,
         },
       ],
     }).compile();
 
-    userRepo = module.get<Repository<UserEntity>>(
-      getRepositoryToken(UserEntity),
-    );
+    userRepo = module.get<Repository<UserModel>>(getRepositoryToken(UserModel));
     jwtService = new JwtService({ secret: 'test' });
     userService = new UserService(userRepo);
     authMiddleware = new AuthMiddleware(jwtService, userService);

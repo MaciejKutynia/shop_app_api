@@ -1,6 +1,6 @@
 import { AuthGuard } from '../auth.guard';
 import { ExecutionContext } from '@nestjs/common';
-import { UserEntity } from '../../../users/entities/user.entity';
+import { UserModel } from '../../../users/entities/user.entity';
 
 describe('AuthGuard', () => {
   let authGuard: AuthGuard;
@@ -16,7 +16,7 @@ describe('AuthGuard', () => {
   });
 
   it('should return true if user is authenticated', () => {
-    const user: UserEntity = { id: 1, email: 'test@example.com' } as UserEntity;
+    const user: UserModel = { id: 1, email: 'test@example.com' } as UserModel;
 
     jest.spyOn(context.switchToHttp(), 'getRequest').mockReturnValue({ user });
 

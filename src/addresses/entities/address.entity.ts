@@ -7,45 +7,45 @@ import { AddressType } from '../interfaces/address.interface';
 export class AddressModel {
   @Field(() => Int)
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
-  id?: number;
+  readonly id?: number;
 
   @Field(() => Int)
   @Column({ type: 'int', name: 'user_id' })
-  user_id: number;
+  readonly user_id: number;
 
   @Field()
   @Column({ type: 'text', name: 'address' })
-  address: string;
+  readonly address: string;
 
   @Field()
   @Column({ type: 'text', name: 'city' })
-  city: string;
+  readonly city: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 255, name: 'type', nullable: true })
-  type: AddressType;
+  readonly type: AddressType;
 
   @Field()
   @Column({ type: 'varchar', length: 10, name: 'zip_code' })
-  zip_code: string;
+  readonly zip_code: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 30, nullable: true, name: 'phone' })
-  phone?: string;
+  readonly phone?: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 100, nullable: true, name: 'first_name' })
-  first_name?: string;
+  readonly first_name?: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 100, nullable: true, name: 'last_name' })
-  last_name?: string;
+  readonly last_name?: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 255, nullable: true, name: 'company' })
-  company?: string;
+  readonly company?: string;
 
   @Field({ nullable: true })
   @Column({ type: 'varchar', length: 30, nullable: true, name: 'vat_id' })
-  vat_id?: string;
+  readonly vat_id?: string;
 }

@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../../users/services/user.service';
-import { UserEntity } from '../../users/entities/user.entity';
+import { UserModel } from '../../users/entities/user.entity';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -24,7 +24,7 @@ export class AuthMiddleware implements NestMiddleware {
         const decoded = this.jwtService.verify(token, {
           secret: process.env.JWT_SECRET,
         });
-        const user: UserEntity = await this.usersService.findOne(decoded.id);
+        const user: UserModel = await this.usersService.findOne(decoded.id);
         if (user) {
           req.user = {
             id: user.id,

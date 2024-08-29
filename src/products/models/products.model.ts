@@ -40,7 +40,7 @@ export class GetProductsInput {
   @Field(() => SortInput, { nullable: true })
   sort: SortInterface;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => FilterInput, { nullable: true })
   filters: FiltersInterface;
 }
 
@@ -53,7 +53,7 @@ export class ProductsResponse {
   count: number;
 }
 
-@ObjectType()
+@InputType()
 export class SortInput {
   @Field({ defaultValue: 'id', nullable: true })
   orderBy: string;
@@ -62,11 +62,11 @@ export class SortInput {
   direction: string;
 }
 
-@ObjectType()
+@InputType()
 export class FilterInput {
-  @Field({ defaultValue: 'id', nullable: true })
-  orderBy: string;
+  @Field(() => [Number], { nullable: true })
+  price: [number, number];
 
-  @Field({ defaultValue: 'ASC', nullable: true })
-  direction: string;
+  @Field(() => String, { nullable: true })
+  variant: string;
 }

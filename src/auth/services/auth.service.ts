@@ -12,12 +12,17 @@ import {
 import { AddressService } from '../../addresses/services/address.service';
 import { AddressModel } from '../../addresses/entities/address.entity';
 import { JwtService } from '@nestjs/jwt';
+import { TokenBlackListService } from '../../tokenBlackList/services/tokenBlackList.service';
+import { ConfigService } from '@nestjs/config';
+import { UserModel } from '../../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly addressService: AddressService,
+    private readonly tokenBlackListService: TokenBlackListService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
     private readonly userService: UserService,
   ) {}
 
@@ -29,7 +34,7 @@ export class AuthService {
    * @throws {UnauthorizedException} - If the credentials are invalid.
    * @throws {ForbiddenException} - If the user is blocked.
    */
-  async loginUser(data: LoginDataInterface): Promise<string> {
+  public async loginUser(data: LoginDataInterface): Promise<string> {
     const { email, password: plain_password } = data;
 
     const user = await this.userService.findOne(email, 'email');
@@ -68,7 +73,7 @@ export class AuthService {
    * @returns {Promise<AddressModel>} - A promise that resolves to the created address entity.
    * @throws {ForbiddenException} - If the email already exists.
    */
-  async registerUser(data: CreateUserInterface): Promise<AddressModel> {
+  public async registerUser(data: CreateUserInterface): Promise<AddressModel> {
     const { email, password, ...address } = data;
 
     const isEmailExists = await this.userService.checkEmail(email);
@@ -78,8 +83,57 @@ export class AuthService {
 
     const { id } = await this.userService.createUser(email, password);
 
-    // TODO: wysłanie maila z linkiem aktywacyjnym
+    // TODO: add possibility of sending email with activation link
 
     return this.addressService.createAddress(id, address);
+  }
+
+  /**
+   * Verifies the provided JWT token.
+   *
+   * @param {string} token - The JWT token to verify.
+   * @returns {Promise<any>} - The user associated with the token if valid.
+   * @throws {UnauthorizedException} - If the token is invalid or the user does not exist.
+   */
+  public async verifyToken(token: string): Promise<Partial<UserModel>> {
+    try {
+      const decodedPayload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      });
+      const { id } = decodedPayload;
+      const user = await this.userService.getUserById(id);
+      if (!user) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      const isTokenInBlackList =
+        await this.tokenBlackListService.checkToken(token);
+
+      if (isTokenInBlackList) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
+  }
+
+  /**
+   * Logs out a user by adding the provided token to the blacklist.
+   *
+   * @param {string} token - The JWT token to blacklist.
+   * @returns {Promise<void>}
+   */
+  public async logoutUser(token: string): Promise<void> {
+    await this.tokenBlackListService.addToken(token);
+  }
+
+  public async activateAccount(access_token: string): Promise<void> {
+    const user = await this.userService.findOne(access_token, 'access_token');
+    if (!user) {
+      throw new UnauthorizedException("User don't exist");
+    }
+    await this.userService.activateUser(user.id);
   }
 }

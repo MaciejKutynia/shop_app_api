@@ -1,9 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity('config')
-export class ConfigModel {
+export class StoreConfigModel {
   @Field(() => Int)
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

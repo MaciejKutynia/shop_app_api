@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConfigModel } from '../entities/config.entity';
+import { StoreConfigModel } from '../entities/storeConfig.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class ConfigService {
+export class StoreConfigService {
   constructor(
-    @InjectRepository(ConfigModel)
-    private readonly configRepo: Repository<ConfigModel>,
+    @InjectRepository(StoreConfigModel)
+    private readonly configRepo: Repository<StoreConfigModel>,
   ) {}
 
   async getConfig() {

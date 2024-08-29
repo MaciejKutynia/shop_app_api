@@ -1,22 +1,47 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Field, ObjectType } from '@nestjs/graphql';
 
+@ObjectType()
 @Entity('cart')
-export class CartEntity {
+export class CartModel {
+  @Field()
   @PrimaryColumn({ type: 'varchar', name: 'uuid', length: 255 })
-  uuid: string;
+  readonly uuid: string;
 
-  @Column({ type: 'int', name: 'user_id' })
-  user_id: number;
+  @Field({ nullable: true })
+  @Column({ type: 'int', name: 'user_id', nullable: true })
+  readonly user_id: number | null;
 
-  @Column({ type: 'text', name: 'products' })
-  products: string;
+  @Field({ nullable: true })
+  @Column({ type: 'text', name: 'products', nullable: true })
+  readonly products: string | null;
 
-  @Column({ type: 'text', name: 'prices' })
-  prices: string;
+  @Field({ nullable: true })
+  @Column({ type: 'text', name: 'prices', nullable: true })
+  readonly prices: string | null;
 
+  @Field({ nullable: true })
   @Column({ type: 'text', name: 'shipping_method', nullable: true })
-  shipping_method: string;
+  readonly shipping_method: string;
 
+  @Field({ nullable: true })
   @Column({ type: 'text', name: 'payment_method', nullable: true })
-  payment_method: string;
+  readonly payment_method: string;
+
+  @Field()
+  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+  readonly created_at: number;
+
+  @Field()
+  @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
+  readonly updated_at: number;
+
+  @Field({ nullable: true })
+  readonly new?: boolean;
 }

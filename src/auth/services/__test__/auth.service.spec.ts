@@ -6,7 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AddressModel } from '../../../addresses/entities/address.entity';
-import { UserEntity } from '../../../users/entities/user.entity';
+import { UserModel } from '../../../users/entities/user.entity';
 import { CreateUserInterface } from '../../../users/interfaces/user.interface';
 import { ForbiddenException } from '@nestjs/common';
 
@@ -21,7 +21,7 @@ describe('AuthService', () => {
       providers: [
         UserService,
         {
-          provide: getRepositoryToken(UserEntity),
+          provide: getRepositoryToken(UserModel),
           useClass: Repository,
         },
       ],
@@ -36,8 +36,8 @@ describe('AuthService', () => {
       ],
     }).compile();
 
-    const userRepo = userModule.get<Repository<UserEntity>>(
-      getRepositoryToken(UserEntity),
+    const userRepo = userModule.get<Repository<UserModel>>(
+      getRepositoryToken(UserModel),
     );
     const addressRepo = userModule.get<Repository<AddressModel>>(
       getRepositoryToken(AddressModel),

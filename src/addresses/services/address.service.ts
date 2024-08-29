@@ -20,7 +20,7 @@ export class AddressService {
    * @param {number} user_id - The ID of the user.
    * @returns {Promise<AddressModel[]>} - A promise that resolves to an array of address entities.
    */
-  async getAllAddresses(user_id: number): Promise<AddressModel[]> {
+  public async getAllAddresses(user_id: number): Promise<AddressModel[]> {
     return this.addressRepo.find({ where: { user_id } });
   }
 
@@ -31,7 +31,7 @@ export class AddressService {
    * @param {number} id - The ID of the address.
    * @returns {Promise<AddressModel>} - A promise that resolves to the address entity.
    */
-  async getAddress(user_id: number, id: number): Promise<AddressModel> {
+  public async getAddress(user_id: number, id: number): Promise<AddressModel> {
     return this.addressRepo.findOne({ where: { user_id, id } });
   }
 
@@ -42,7 +42,7 @@ export class AddressService {
    * @param {CreateAddressInterface} newAddress - The data for the new address.
    * @returns {Promise<AddressModel>} - A promise that resolves to the created address entity.
    */
-  async createAddress(
+  public async createAddress(
     user_id: number,
     newAddress: CreateAddressInterface,
   ): Promise<AddressModel> {
@@ -59,7 +59,7 @@ export class AddressService {
    * @param {UpdateAddressInterface} updatedAddress - The updated address data.
    * @returns {Promise<AddressModel>} - A promise that resolves to the updated address entity.
    */
-  async updateAddress(
+  public async updateAddress(
     user_id: number,
     id: number,
     updatedAddress: UpdateAddressInterface,
