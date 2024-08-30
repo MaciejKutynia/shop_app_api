@@ -7,7 +7,7 @@ import { CartModel } from '../entities/cart.entity';
 export class CartResolver {
   constructor(private readonly cartService: CartService) {}
 
-  @Query((returns) => CartModel)
+  @Query(() => CartModel)
   async getCart(
     @Context() ctx: GraphQLContext,
     @Args({ name: 'cartID', type: () => String, nullable: true })
@@ -17,7 +17,7 @@ export class CartResolver {
     return this.cartService.getCart(user_id, cartID);
   }
 
-  @Mutation((returns) => CartModel)
+  @Mutation(() => CartModel)
   async addProductToCart(
     @Args({
       name: 'cartID',
@@ -29,5 +29,17 @@ export class CartResolver {
     quantity: number,
   ) {
     return this.cartService.addProductToCart(sku, quantity || 1, cartID);
+  }
+
+  @Mutation(() => CartModel)
+  async mergeCarts(
+    @Context() ctx: GraphQLContext,
+    @Args({
+      name: 'cartID',
+      type: () => String!,
+    })
+    cartID: string,
+  ) {
+    return this.cartService.mergeCarts(ctx.req.user.id, cartID);
   }
 }

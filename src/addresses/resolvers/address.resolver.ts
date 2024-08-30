@@ -14,14 +14,14 @@ import {
 export class AddressResolver {
   constructor(private readonly addressService: AddressService) {}
 
-  @Query((returns) => [AddressModel])
+  @Query(() => [AddressModel])
   @UseGuards(AuthGuard)
   async getAddresses(@Context() ctx: GraphQLContext) {
     const { id } = ctx?.req?.user || {};
     return this.addressService.getAllAddresses(id);
   }
 
-  @Query((returns) => AddressModel)
+  @Query(() => AddressModel)
   @UseGuards(AuthGuard)
   async getAddress(
     @Context() ctx: GraphQLContext,
@@ -31,7 +31,7 @@ export class AddressResolver {
     return this.addressService.getAddress(user_id, id);
   }
 
-  @Mutation((returns) => AddressModel)
+  @Mutation(() => AddressModel)
   @UseGuards(AuthGuard)
   async createAddress(
     @Context() ctx: GraphQLContext,
@@ -42,7 +42,7 @@ export class AddressResolver {
     return this.addressService.createAddress(id, address);
   }
 
-  @Mutation((returns) => AddressModel)
+  @Mutation(() => AddressModel)
   @UseGuards(AuthGuard)
   async updateAddress(
     @Context() ctx: GraphQLContext,

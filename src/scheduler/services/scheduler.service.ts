@@ -19,4 +19,9 @@ export class SchedulerService {
   async checkBlackListTokens() {
     await this.tokenBlackListService.checkTokens();
   }
+
+  @Cron(cronIntervals.oneAtADay)
+  async checkAbandonedCarts() {
+    await this.cartService.checkCartsExpired();
+  }
 }

@@ -41,18 +41,16 @@ export class AuthController {
     return this.authService.verifyToken(token);
   }
 
-  // TODO: Add possibility of password recovery
   @Post('recover-password')
   async recoverPassword(@Body() email: string) {
-    return 'recover-password';
+    return this.authService.recoveryPassword(email);
   }
 
-  // TODO: Add possibility of changing recovery
   @UseGuards(AuthGuard)
   @Post('change-password')
   async changePassword(@Req() req: Request, @Body() newPassword: string) {
     const { id } = req.user;
-    return 'change-password';
+    return this.authService.changePassword(id, newPassword);
   }
 
   @Post('activate-account')

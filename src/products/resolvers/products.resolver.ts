@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver, Int } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ProductsService } from '../services/products.service';
 import { UseGuards } from '@nestjs/common';
 import { AdminGuard } from '../../auth/guards/auth.guard';
@@ -13,7 +13,7 @@ import { ProductsModel } from '../entities/products.entity';
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Query((returns) => ProductsResponse)
+  @Query(() => ProductsResponse)
   async getProducts(
     @Args({
       name: 'params',
@@ -24,7 +24,7 @@ export class ProductsResolver {
     return this.productsService.getAllProducts(params);
   }
 
-  @Mutation((returns) => ProductsModel)
+  @Mutation(() => ProductsModel)
   @UseGuards(AdminGuard)
   async createProduct(
     @Args({ name: 'product', type: () => CreateProductInput })

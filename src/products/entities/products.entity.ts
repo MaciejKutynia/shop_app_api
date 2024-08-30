@@ -39,4 +39,8 @@ export class ProductsModel {
   @Field({ nullable: true })
   @Column({ type: 'text', name: 'description', nullable: true })
   readonly description: string | null;
+
+  @Field()
+  @Column({ type: 'int', name: 'available', default: 1 })
+  readonly available: number;
 }

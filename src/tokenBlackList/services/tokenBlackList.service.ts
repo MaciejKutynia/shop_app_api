@@ -79,6 +79,7 @@ export class TokenBlackListService {
       });
       return !!decodedToken;
     } catch (e) {
+      console.log('Error validating token: ', e);
       return false;
     }
   }

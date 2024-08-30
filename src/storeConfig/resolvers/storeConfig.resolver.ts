@@ -6,7 +6,7 @@ import { StoreConfigService } from '../services/storeConfig.service';
 export class StoreConfigResolver {
   constructor(private readonly configService: StoreConfigService) {}
 
-  @Query((returns) => [StoreConfigModel])
+  @Query(() => [StoreConfigModel])
   async getConfig() {
     return this.configService.getConfig();
   }

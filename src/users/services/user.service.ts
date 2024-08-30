@@ -67,6 +67,7 @@ export class UserService {
   }
 
   private returnUserWithoutPassword(user: UserModel): Partial<UserModel> {
+    //eslint-disable-next-line
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }

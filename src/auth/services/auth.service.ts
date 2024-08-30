@@ -44,7 +44,7 @@ export class AuthService {
 
     const { password, is_blocked, id } = user;
 
-    if (!!is_blocked) {
+    if (is_blocked) {
       throw new ForbiddenException('User is blocked');
     }
 
@@ -114,7 +114,8 @@ export class AuthService {
       }
 
       return user;
-    } catch (error) {
+    } catch (e) {
+      console.log('Error validating token: ', e);
       throw new UnauthorizedException('Invalid token');
     }
   }
@@ -135,5 +136,18 @@ export class AuthService {
       throw new UnauthorizedException("User don't exist");
     }
     await this.userService.activateUser(user.id);
+  }
+
+  // TODO: Add possibility of password recovery
+  public async recoveryPassword(email: string): Promise<string> {
+    return email;
+  }
+
+  // TODO: Add possibility of changing password
+  public async changePassword(
+    id: number,
+    newPassword: string,
+  ): Promise<{ id: number; newPassword: string }> {
+    return { id, newPassword };
   }
 }

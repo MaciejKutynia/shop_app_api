@@ -6,7 +6,6 @@ import { ProductsModel } from '../entities/products.entity';
 import { Repository } from 'typeorm';
 import { CategoriesService } from '../../categories/services/categories.service';
 import { ProductsResponseInterface } from '../interfaces/products.interface';
-import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class ProductsService {

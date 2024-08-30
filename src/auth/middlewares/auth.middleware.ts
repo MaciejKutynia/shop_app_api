@@ -30,7 +30,8 @@ export class AuthMiddleware implements NestMiddleware {
             id: user.id,
           };
         }
-      } catch (error) {
+      } catch (e) {
+        console.log('Error:', e);
         next(new UnauthorizedException('Token expired'));
       }
     }

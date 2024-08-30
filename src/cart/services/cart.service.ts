@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CartModel } from '../entities/cart.entity';
 import { Repository } from 'typeorm';
@@ -50,6 +50,8 @@ export class CartService {
   public async addProductToCart(sku: string, quantity: number, uuid: string) {
     const cart = await this.cartRepo.findOne({ where: { uuid } });
     const product = await this.productsService.getProductBySku(sku);
+    if (!product.available)
+      throw new NotFoundException('Product is not available');
     const { products, prices = 0 } = cart || {};
     const parsedProducts = products ? JSON.parse(products) : [];
     const existingProduct = parsedProducts.find((p) => p.sku === sku);
@@ -78,28 +80,36 @@ export class CartService {
     }
     const cart = await this.cartRepo.findOne({ where: { uuid } });
     const products = cart?.products ? JSON.parse(cart.products) : [];
+    if (!products.length) {
+      await this.cartRepo.delete({ uuid });
+      return userCart;
+    }
     const userProducts = userCart?.products
       ? JSON.parse(userCart.products)
       : [];
-    const mergedProducts = [];
-    for (const userProduct of userProducts) {
-      const product = products.find((p) => p.sku === userProduct.sku);
-      if (product) {
-        userProducts.quantity += product.quantity;
-        mergedProducts.push(userProduct);
+    for (const product of products) {
+      const existingProduct = userProducts.find(
+        (userProduct) => userProduct.sku === product.sku,
+      );
+      if (existingProduct) {
+        existingProduct.quantity += product.quantity;
       } else {
-        mergedProducts.push(product);
+        userProducts.push(product);
       }
     }
-    console.log(mergedProducts);
+
     const mergedPrices = cart.prices + userCart.prices;
 
-    /*
-     * TODO:
-     *  - sprawdzenie ilości tych samych produktów i dodanie ich
-     *  - zapisanie nowego koszyka jako istniejącego koszyka użytkownika
-     *  - usunięcie koszyka gościa
-     * */
+    await this.cartRepo.update(
+      { uuid: userCart.uuid },
+      {
+        products: JSON.stringify(userProducts),
+        prices: mergedPrices,
+      },
+    );
+    await this.cartRepo.delete({ uuid });
+
+    return this.cartRepo.findOne({ where: { user_id } });
   }
 
   private async createCart(user_id: number | null) {
