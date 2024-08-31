@@ -16,6 +16,8 @@ import { UsersModule } from './users/users.module';
 import { AuthMiddleware } from './auth/middlewares/auth.middleware';
 import { AppSchedulerModule } from './scheduler/scheduler.module';
 import { TokenBlackListModule } from './tokenBlackList/tokenBlackList.module';
+import { OrdersModule } from './orders/orders.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -26,7 +28,9 @@ import { TokenBlackListModule } from './tokenBlackList/tokenBlackList.module';
     CartModule,
     CategoriesModule,
     LocalConfigModule,
+    OrdersModule,
     ProductsModule,
+    StripeModule,
     TokenBlackListModule,
     UsersModule,
     //Tools modules
