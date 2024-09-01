@@ -6,7 +6,7 @@ export type FiltersInterface = {
 };
 
 export type SortInterface = {
-  orderBy: string | null;
+  order_by: string | null;
   direction: 'ASC' | 'DESC';
 };
 

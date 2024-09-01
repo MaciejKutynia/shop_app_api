@@ -18,11 +18,11 @@ export class TokenBlackListService {
    * Checks all tokens in the blacklist and deletes the invalid ones.
    * @returns {Promise<void>}
    */
-  public async checkTokens() {
+  public async checkTokens(): Promise<void> {
     const tokens = await this.getAllTokens();
     for (const { token } of tokens) {
-      const isTokenValid = await this.validateToken(token);
-      if (!isTokenValid) {
+      const is_token_valid = await this.validateToken(token);
+      if (!is_token_valid) {
         await this.deleteToken(token);
       }
     }
@@ -43,10 +43,10 @@ export class TokenBlackListService {
    * @returns {Promise<boolean>} - True if the token exists, false otherwise.
    */
   public async checkToken(token: string): Promise<boolean> {
-    const tokenExists = await this.tokenBlackListRepository.findOne({
+    const token_exists = await this.tokenBlackListRepository.findOne({
       where: { token },
     });
-    return !!tokenExists;
+    return !!token_exists;
   }
 
   /**
@@ -74,10 +74,10 @@ export class TokenBlackListService {
    */
   private async validateToken(token: string): Promise<boolean> {
     try {
-      const decodedToken = this.jwtService.verify(token, {
+      const decoded_token = this.jwtService.verify(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
-      return !!decodedToken;
+      return !!decoded_token;
     } catch (e) {
       console.log('Error validating token: ', e);
       return false;

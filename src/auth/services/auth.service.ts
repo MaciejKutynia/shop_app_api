@@ -15,6 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenBlackListService } from '../../tokenBlackList/services/tokenBlackList.service';
 import { ConfigService } from '@nestjs/config';
 import { UserModel } from '../../users/entities/user.entity';
+import { ChangePasswordResponseInterface } from '../interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -48,11 +49,11 @@ export class AuthService {
       throw new ForbiddenException('User is blocked');
     }
 
-    const isPasswordValid = await this.userService.checkPassword(
+    const is_password_valid = await this.userService.checkPassword(
       plain_password,
       password,
     );
-    if (!isPasswordValid) {
+    if (!is_password_valid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -76,8 +77,8 @@ export class AuthService {
   public async registerUser(data: CreateUserInterface): Promise<AddressModel> {
     const { email, password, ...address } = data;
 
-    const isEmailExists = await this.userService.checkEmail(email);
-    if (isEmailExists) {
+    const is_email_exists = await this.userService.checkEmail(email);
+    if (is_email_exists) {
       throw new ForbiddenException('Email already exists');
     }
 
@@ -97,19 +98,19 @@ export class AuthService {
    */
   public async verifyToken(token: string): Promise<Partial<UserModel>> {
     try {
-      const decodedPayload = await this.jwtService.verifyAsync(token, {
+      const decoded_payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
-      const { id } = decodedPayload;
+      const { id } = decoded_payload;
       const user = await this.userService.getUserById(id);
       if (!user) {
         throw new UnauthorizedException('Invalid token');
       }
 
-      const isTokenInBlackList =
+      const is_token_in_black_list =
         await this.tokenBlackListService.checkToken(token);
 
-      if (isTokenInBlackList) {
+      if (is_token_in_black_list) {
         throw new UnauthorizedException('Invalid token');
       }
 
@@ -146,8 +147,8 @@ export class AuthService {
   // TODO: Add possibility of changing password
   public async changePassword(
     id: number,
-    newPassword: string,
-  ): Promise<{ id: number; newPassword: string }> {
-    return { id, newPassword };
+    new_password: string,
+  ): Promise<ChangePasswordResponseInterface> {
+    return { id, new_password };
   }
 }

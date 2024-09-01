@@ -6,6 +6,8 @@ import { ProductsModel } from '../entities/products.entity';
 import { Repository } from 'typeorm';
 import { CategoriesService } from '../../categories/services/categories.service';
 import { ProductsResponseInterface } from '../interfaces/products.interface';
+import { CartProductInterface } from '../../cart/interfaces/cart.interface';
+import { StripeProductItemInterface } from '../../stripe/interfaces/stripe.interface';
 
 @Injectable()
 export class ProductsService {
@@ -24,7 +26,7 @@ export class ProductsService {
     params: GetProductsInput,
   ): Promise<ProductsResponseInterface> {
     const { page, limit, filters, sort, category_url_key } = params;
-    const { orderBy, direction } = sort || {};
+    const { order_by, direction } = sort || {};
     const { price, variant } = filters || {};
     const skip = (page - 1) * limit;
     const { id: category_id } =
@@ -48,8 +50,8 @@ export class ProductsService {
 
     query.skip(skip).take(limit);
 
-    if (orderBy) {
-      query.orderBy(orderBy, direction);
+    if (order_by) {
+      query.orderBy(order_by, direction);
     }
 
     const [products, count] = await query.getManyAndCount();
@@ -87,6 +89,23 @@ export class ProductsService {
 
   public async getProductBySku(sku: string): Promise<ProductsModel> {
     return this.productsRepo.findOne({ where: { sku } });
+  }
+
+  public async prepareProductsForStripe(
+    order_products: CartProductInterface[],
+  ): Promise<StripeProductItemInterface[]> {
+    const stripe_products = [];
+    for (const order_product of order_products) {
+      const product = await this.productsRepo.findOne({
+        where: { sku: order_product.sku },
+      });
+      stripe_products.push({
+        name: product.name,
+        price: product.price,
+        quantity: order_product.quantity,
+      });
+    }
+    return stripe_products;
   }
 
   /**

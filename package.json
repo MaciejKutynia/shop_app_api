@@ -38,6 +38,7 @@
     "mysql2": "^3.11.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "stripe": "^16.9.0",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

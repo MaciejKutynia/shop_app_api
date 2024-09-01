@@ -57,8 +57,8 @@ export class UserService {
     length?: number,
   ): Promise<string> {
     const salt = await bcrypt.genSalt(saltNum);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return length ? hashedPassword.slice(0, length) : hashedPassword;
+    const hashed_password = await bcrypt.hash(password, salt);
+    return length ? hashed_password.slice(0, length) : hashed_password;
   }
 
   private async createAdditionalToken(length?: number): Promise<string> {
@@ -66,9 +66,19 @@ export class UserService {
     return await this.createPassword(time.toString(), 3, length);
   }
 
-  private returnUserWithoutPassword(user: UserModel): Partial<UserModel> {
-    //eslint-disable-next-line
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+  private returnUserWithoutPassword(
+    user: UserModel,
+    fields_to_remove: string[] = [],
+  ): Partial<UserModel> {
+    const standard_fields_to_remove = [
+      'password',
+      'access_token',
+      'rp_token',
+      'is_blocked',
+    ];
+    for (const field of [...fields_to_remove, ...standard_fields_to_remove]) {
+      delete user[field];
+    }
+    return user;
   }
 }

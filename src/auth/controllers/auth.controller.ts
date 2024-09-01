@@ -13,8 +13,11 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async loginUser(@Body() loginData: LoginDataInterface, @Res() res: Response) {
-    const token = await this.authService.loginUser(loginData);
+  async loginUser(
+    @Body() login_data: LoginDataInterface,
+    @Res() res: Response,
+  ) {
+    const token = await this.authService.loginUser(login_data);
     res
       .cookie('token', token, {
         domain: undefined,
@@ -26,8 +29,8 @@ export class AuthController {
   }
 
   @Post('register')
-  async createUser(@Body() createUser: CreateUserInterface) {
-    return this.authService.registerUser(createUser);
+  async createUser(@Body() create_user: CreateUserInterface) {
+    return this.authService.registerUser(create_user);
   }
 
   @UseGuards(AuthGuard)
@@ -37,7 +40,7 @@ export class AuthController {
   }
 
   @Post('verify-token')
-  async verifyToken(@Body() token: string) {
+  async verifyToken(@Body() { token }: { token: string }) {
     return this.authService.verifyToken(token);
   }
 
@@ -48,9 +51,9 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Post('change-password')
-  async changePassword(@Req() req: Request, @Body() newPassword: string) {
+  async changePassword(@Req() req: Request, @Body() new_password: string) {
     const { id } = req.user;
-    return this.authService.changePassword(id, newPassword);
+    return this.authService.changePassword(id, new_password);
   }
 
   @Post('activate-account')

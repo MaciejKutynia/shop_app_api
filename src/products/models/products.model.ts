@@ -56,7 +56,7 @@ export class ProductsResponse {
 @InputType()
 export class SortInput {
   @Field({ defaultValue: 'id', nullable: true })
-  orderBy: string;
+  order_by: string;
 
   @Field({ defaultValue: 'ASC', nullable: true })
   direction: string;

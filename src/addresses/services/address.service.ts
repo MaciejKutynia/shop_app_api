@@ -46,8 +46,8 @@ export class AddressService {
     user_id: number,
     newAddress: CreateAddressInterface,
   ): Promise<AddressModel> {
-    const { address: parsedAddress, ...rest } = newAddress;
-    const address = JSON.stringify(parsedAddress);
+    const { address: parsed_address, ...rest } = newAddress;
+    const address = JSON.stringify(parsed_address);
     return this.addressRepo.save({ ...rest, address, user_id });
   }
 
@@ -64,8 +64,8 @@ export class AddressService {
     id: number,
     updatedAddress: UpdateAddressInterface,
   ): Promise<AddressModel> {
-    const { address: parsedAddress, ...rest } = updatedAddress;
-    const address = parsedAddress ? JSON.stringify(parsedAddress) : null;
+    const { address: parsed_address, ...rest } = updatedAddress;
+    const address = parsed_address ? JSON.stringify(parsed_address) : null;
     await this.addressRepo.update(id, {
       ...rest,
       ...(address ? { address } : {}),

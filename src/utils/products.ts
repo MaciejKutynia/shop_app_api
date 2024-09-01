@@ -65,8 +65,8 @@ export const createUrlKey = (name: string) =>
 
 export const checkSKU = (sku: string, list: string[]) => {
   if (list.includes(sku)) {
-    const newSKU = createSKU(6);
-    return checkSKU(newSKU, list);
+    const new_sku = createSKU(6);
+    return checkSKU(new_sku, list);
   }
   return sku;
 };
