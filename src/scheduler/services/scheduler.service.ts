@@ -6,7 +6,7 @@ import { CartService } from '../../cart/services/cart.service';
 import { OrdersService } from '../../orders/services/orders.service';
 import { OrderStatusEnum } from '../../orders/interfaces/orders.interface';
 import { StripeService } from '../../stripe/services/stripe.service';
-import { STRIPE_PAYMENT_METHOD } from '../../utils/const/stripe';
+import { STRIPE_PAYMENT_METHOD } from '../../utils/const/payment_methods';
 
 @Injectable()
 export class SchedulerService {
