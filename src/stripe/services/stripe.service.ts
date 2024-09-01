@@ -22,13 +22,16 @@ export class StripeService {
   }
 
   public async getSessionID(order_id: number) {
-    return this.stripeRepo.findOne({ where: { order_id } });
+    const { session_id } = await this.stripeRepo.findOne({
+      where: { order_id },
+    });
+    return session_id;
   }
 
   public async checkOrderStatus(session_id: string) {
-    const session_data =
+    const { payment_status } =
       await this.stripe.checkout.sessions.retrieve(session_id);
-    return session_data.payment_status;
+    return payment_status;
   }
 
   public async createPayment(

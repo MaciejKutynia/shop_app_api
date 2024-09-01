@@ -44,7 +44,7 @@ export class SchedulerService {
   async checkPendingOrders() {
     const orders = await this.ordersService.getAllPendingOrdersForScheduler();
     for (const order of orders) {
-      const { session_id } = await this.stripeService.getSessionID(order.id);
+      const session_id = await this.stripeService.getSessionID(order.id);
       const payment_status =
         await this.stripeService.checkOrderStatus(session_id);
       await this.ordersService.updateOrderStatus(
